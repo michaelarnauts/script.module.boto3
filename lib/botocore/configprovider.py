@@ -71,6 +71,14 @@ BOTOCORE_DEFAUT_SESSION_VARIABLES = {
     'metadata_service_num_attempts': (
         'metadata_service_num_attempts',
         'AWS_METADATA_SERVICE_NUM_ATTEMPTS', 1, int),
+    'ec2_metadata_service_endpoint': (
+        'ec2_metadata_service_endpoint',
+        'AWS_EC2_METADATA_SERVICE_ENDPOINT',
+        None, None),
+    'imds_use_ipv6': (
+        'imds_use_ipv6',
+        'AWS_IMDS_USE_IPV6',
+        False, None),
     'parameter_validation': ('parameter_validation', None, True, None),
     # Client side monitoring configurations.
     # Note: These configurations are considered internal to botocore.
@@ -83,7 +91,7 @@ BOTOCORE_DEFAUT_SESSION_VARIABLES = {
     # Endpoint discovery configuration
     'endpoint_discovery_enabled': (
         'endpoint_discovery_enabled', 'AWS_ENDPOINT_DISCOVERY_ENABLED',
-        False, utils.ensure_boolean),
+        'auto', None),
     'sts_regional_endpoints': (
         'sts_regional_endpoints', 'AWS_STS_REGIONAL_ENDPOINTS', 'legacy',
         None
@@ -119,7 +127,15 @@ DEFAULT_S3_CONFIG_VARS = {
         'AWS_S3_US_EAST_1_REGIONAL_ENDPOINT', None, None
     )
 }
-
+# A mapping for the proxy specific configuration vars. These are
+# used to configure how botocore interacts with proxy setups while
+# sending requests.
+DEFAULT_PROXIES_CONFIG_VARS = {
+    'proxy_ca_bundle': ('proxy_ca_bundle', None, None, None),
+    'proxy_client_cert': ('proxy_client_cert', None, None, None),
+    'proxy_use_forwarding_for_https': (
+        'proxy_use_forwarding_for_https', None, None, utils.normalize_boolean),
+}
 
 def create_botocore_default_config_mapping(session):
     chain_builder = ConfigChainFactory(session=session)
@@ -128,6 +144,10 @@ def create_botocore_default_config_mapping(session):
     config_mapping['s3'] = SectionConfigProvider(
         's3', session, _create_config_chain_mapping(
             chain_builder, DEFAULT_S3_CONFIG_VARS)
+    )
+    config_mapping['proxies_config'] = SectionConfigProvider(
+        'proxies_config', session, _create_config_chain_mapping(
+            chain_builder, DEFAULT_PROXIES_CONFIG_VARS)
     )
     return config_mapping
 

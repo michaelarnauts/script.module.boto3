@@ -45,7 +45,7 @@
         {"shape":"LimitExceededException"},
         {"shape":"ResourceInUseException"}
       ],
-      "documentation":"<p>Creates a campaign by deploying a solution version. When a client calls the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html\">GetRecommendations</a> and <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetPersonalizedRanking.html\">GetPersonalizedRanking</a> APIs, a campaign is specified in the request.</p> <p> <b>Minimum Provisioned TPS and Auto-Scaling</b> </p> <p>A transaction is a single <code>GetRecommendations</code> or <code>GetPersonalizedRanking</code> call. Transactions per second (TPS) is the throughput and unit of billing for Amazon Personalize. The minimum provisioned TPS (<code>minProvisionedTPS</code>) specifies the baseline throughput provisioned by Amazon Personalize, and thus, the minimum billing charge. If your TPS increases beyond <code>minProvisionedTPS</code>, Amazon Personalize auto-scales the provisioned capacity up and down, but never below <code>minProvisionedTPS</code>, to maintain a 70% utilization. There's a short time delay while the capacity is increased that might cause loss of transactions. It's recommended to start with a low <code>minProvisionedTPS</code>, track your usage using Amazon CloudWatch metrics, and then increase the <code>minProvisionedTPS</code> as necessary.</p> <p> <b>Status</b> </p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the campaign status, call <a>DescribeCampaign</a>.</p> <note> <p>Wait until the <code>status</code> of the campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListCampaigns</a> </p> </li> <li> <p> <a>DescribeCampaign</a> </p> </li> <li> <p> <a>UpdateCampaign</a> </p> </li> <li> <p> <a>DeleteCampaign</a> </p> </li> </ul>",
+      "documentation":"<p>Creates a campaign by deploying a solution version. When a client calls the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html\">GetRecommendations</a> and <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetPersonalizedRanking.html\">GetPersonalizedRanking</a> APIs, a campaign is specified in the request.</p> <p> <b>Minimum Provisioned TPS and Auto-Scaling</b> </p> <p>A transaction is a single <code>GetRecommendations</code> or <code>GetPersonalizedRanking</code> call. Transactions per second (TPS) is the throughput and unit of billing for Amazon Personalize. The minimum provisioned TPS (<code>minProvisionedTPS</code>) specifies the baseline throughput provisioned by Amazon Personalize, and thus, the minimum billing charge. </p> <p> If your TPS increases beyond <code>minProvisionedTPS</code>, Amazon Personalize auto-scales the provisioned capacity up and down, but never below <code>minProvisionedTPS</code>. There's a short time delay while the capacity is increased that might cause loss of transactions.</p> <p>The actual TPS used is calculated as the average requests/second within a 5-minute window. You pay for maximum of either the minimum provisioned TPS or the actual TPS. We recommend starting with a low <code>minProvisionedTPS</code>, track your usage using Amazon CloudWatch metrics, and then increase the <code>minProvisionedTPS</code> as necessary.</p> <p> <b>Status</b> </p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the campaign status, call <a>DescribeCampaign</a>.</p> <note> <p>Wait until the <code>status</code> of the campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListCampaigns</a> </p> </li> <li> <p> <a>DescribeCampaign</a> </p> </li> <li> <p> <a>UpdateCampaign</a> </p> </li> <li> <p> <a>DeleteCampaign</a> </p> </li> </ul>",
       "idempotent":true
     },
     "CreateDataset":{
@@ -96,7 +96,7 @@
         {"shape":"LimitExceededException"},
         {"shape":"ResourceInUseException"}
       ],
-      "documentation":"<p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source.</p> <important> <p>The dataset import job replaces any previous data in the dataset.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul>"
+      "documentation":"<p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source, as Amazon Personalize makes a copy of your data and processes it in an internal AWS system.</p> <important> <p>The dataset import job replaces any existing data in the dataset that you imported in bulk.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul>"
     },
     "CreateEventTracker":{
       "name":"CreateEventTracker",
@@ -113,8 +113,24 @@
         {"shape":"LimitExceededException"},
         {"shape":"ResourceInUseException"}
       ],
-      "documentation":"<p>Creates an event tracker that you use when sending event data to the specified dataset group using the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html\">PutEvents</a> API.</p> <p>When Amazon Personalize creates an event tracker, it also creates an <i>event-interactions</i> dataset in the dataset group associated with the event tracker. The event-interactions dataset stores the event data from the <code>PutEvents</code> call. The contents of this dataset are not available to the user.</p> <note> <p>Only one event tracker can be associated with a dataset group. You will get an error if you call <code>CreateEventTracker</code> using the same dataset group as an existing event tracker.</p> </note> <p>When you send event data you include your tracking ID. The tracking ID identifies the customer and authorizes the customer to send the data.</p> <p>The event tracker can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the event tracker, call <a>DescribeEventTracker</a>.</p> <note> <p>The event tracker must be in the ACTIVE state before using the tracking ID.</p> </note> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListEventTrackers</a> </p> </li> <li> <p> <a>DescribeEventTracker</a> </p> </li> <li> <p> <a>DeleteEventTracker</a> </p> </li> </ul>",
+      "documentation":"<p>Creates an event tracker that you use when adding event data to a specified dataset group using the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html\">PutEvents</a> API.</p> <note> <p>Only one event tracker can be associated with a dataset group. You will get an error if you call <code>CreateEventTracker</code> using the same dataset group as an existing event tracker.</p> </note> <p>When you create an event tracker, the response includes a tracking ID, which you pass as a parameter when you use the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html\">PutEvents</a> operation. Amazon Personalize then appends the event data to the Interactions dataset of the dataset group you specify in your event tracker. </p> <p>The event tracker can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the event tracker, call <a>DescribeEventTracker</a>.</p> <note> <p>The event tracker must be in the ACTIVE state before using the tracking ID.</p> </note> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListEventTrackers</a> </p> </li> <li> <p> <a>DescribeEventTracker</a> </p> </li> <li> <p> <a>DeleteEventTracker</a> </p> </li> </ul>",
       "idempotent":true
+    },
+    "CreateFilter":{
+      "name":"CreateFilter",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateFilterRequest"},
+      "output":{"shape":"CreateFilterResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"}
+      ],
+      "documentation":"<p>Creates a recommendation filter. For more information, see <a>filter</a>.</p>"
     },
     "CreateSchema":{
       "name":"CreateSchema",
@@ -147,7 +163,7 @@
         {"shape":"LimitExceededException"},
         {"shape":"ResourceInUseException"}
       ],
-      "documentation":"<p>Creates the configuration for training a model. A trained model is known as a solution. After the configuration is created, you train the model (create a solution) by calling the <a>CreateSolutionVersion</a> operation. Every time you call <code>CreateSolutionVersion</code>, a new version of the solution is created.</p> <p>After creating a solution version, you check its accuracy by calling <a>GetSolutionMetrics</a>. When you are satisfied with the version, you deploy it using <a>CreateCampaign</a>. The campaign provides recommendations to a client through the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html\">GetRecommendations</a> API.</p> <p>To train a model, Amazon Personalize requires training data and a recipe. The training data comes from the dataset group that you provide in the request. A recipe specifies the training algorithm and a feature transformation. You can specify one of the predefined recipes provided by Amazon Personalize. Alternatively, you can specify <code>performAutoML</code> and Amazon Personalize will analyze your data and select the optimum USER_PERSONALIZATION recipe for you.</p> <p> <b>Status</b> </p> <p>A solution can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the solution, call <a>DescribeSolution</a>. Wait until the status shows as ACTIVE before calling <code>CreateSolutionVersion</code>.</p> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolutionVersion</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul>"
+      "documentation":"<p>Creates the configuration for training a model. A trained model is known as a solution. After the configuration is created, you train the model (create a solution) by calling the <a>CreateSolutionVersion</a> operation. Every time you call <code>CreateSolutionVersion</code>, a new version of the solution is created.</p> <p>After creating a solution version, you check its accuracy by calling <a>GetSolutionMetrics</a>. When you are satisfied with the version, you deploy it using <a>CreateCampaign</a>. The campaign provides recommendations to a client through the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html\">GetRecommendations</a> API.</p> <p>To train a model, Amazon Personalize requires training data and a recipe. The training data comes from the dataset group that you provide in the request. A recipe specifies the training algorithm and a feature transformation. You can specify one of the predefined recipes provided by Amazon Personalize. Alternatively, you can specify <code>performAutoML</code> and Amazon Personalize will analyze your data and select the optimum USER_PERSONALIZATION recipe for you.</p> <note> <p>Amazon Personalize doesn't support configuring the <code>hpoObjective</code> for solution hyperparameter optimization at this time.</p> </note> <p> <b>Status</b> </p> <p>A solution can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the solution, call <a>DescribeSolution</a>. Wait until the status shows as ACTIVE before calling <code>CreateSolutionVersion</code>.</p> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolutionVersion</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul>"
     },
     "CreateSolutionVersion":{
       "name":"CreateSolutionVersion",
@@ -160,6 +176,7 @@
       "errors":[
         {"shape":"InvalidInputException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"},
         {"shape":"ResourceInUseException"}
       ],
       "documentation":"<p>Trains or retrains an active solution. A solution is created using the <a>CreateSolution</a> operation and must be in the ACTIVE state before calling <code>CreateSolutionVersion</code>. A new version of the solution is created every time you call this operation.</p> <p> <b>Status</b> </p> <p>A solution version can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the version, call <a>DescribeSolutionVersion</a>. Wait until the status shows as ACTIVE before calling <code>CreateCampaign</code>.</p> <p>If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <p class=\"title\"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul>"
@@ -223,6 +240,20 @@
       ],
       "documentation":"<p>Deletes the event tracker. Does not delete the event-interactions dataset from the associated dataset group. For more information on event trackers, see <a>CreateEventTracker</a>.</p>",
       "idempotent":true
+    },
+    "DeleteFilter":{
+      "name":"DeleteFilter",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteFilterRequest"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceInUseException"}
+      ],
+      "documentation":"<p>Deletes a filter.</p>"
     },
     "DeleteSchema":{
       "name":"DeleteSchema",
@@ -372,6 +403,21 @@
         {"shape":"ResourceNotFoundException"}
       ],
       "documentation":"<p>Describes the given feature transformation.</p>",
+      "idempotent":true
+    },
+    "DescribeFilter":{
+      "name":"DescribeFilter",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeFilterRequest"},
+      "output":{"shape":"DescribeFilterResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"ResourceNotFoundException"}
+      ],
+      "documentation":"<p>Describes a filter's properties.</p>",
       "idempotent":true
     },
     "DescribeRecipe":{
@@ -536,6 +582,21 @@
         {"shape":"InvalidNextTokenException"}
       ],
       "documentation":"<p>Returns the list of event trackers associated with the account. The response provides the properties for each event tracker, including the Amazon Resource Name (ARN) and tracking ID. For more information on event trackers, see <a>CreateEventTracker</a>.</p>",
+      "idempotent":true
+    },
+    "ListFilters":{
+      "name":"ListFilters",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListFiltersRequest"},
+      "output":{"shape":"ListFiltersResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"InvalidNextTokenException"}
+      ],
+      "documentation":"<p>Lists all filters that belong to a given dataset group.</p>",
       "idempotent":true
     },
     "ListRecipes":{
@@ -729,6 +790,10 @@
           "shape":"Arn",
           "documentation":"<p>The Amazon Resource Name (ARN) of the batch inference job.</p>"
         },
+        "filterArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the filter used on the batch inference job.</p>"
+        },
         "failureReason":{
           "shape":"FailureReason",
           "documentation":"<p>If the batch inference job failed, the reason for the failure.</p>"
@@ -749,6 +814,10 @@
           "shape":"BatchInferenceJobOutput",
           "documentation":"<p>The Amazon S3 bucket that contains the output data generated by the batch inference job.</p>"
         },
+        "batchInferenceJobConfig":{
+          "shape":"BatchInferenceJobConfig",
+          "documentation":"<p>A string to string map of the configuration details of a batch inference job.</p>"
+        },
         "roleArn":{
           "shape":"RoleArn",
           "documentation":"<p>The ARN of the Amazon Identity and Access Management (IAM) role that requested the batch inference job.</p>"
@@ -767,6 +836,16 @@
         }
       },
       "documentation":"<p>Contains information on a batch inference job.</p>"
+    },
+    "BatchInferenceJobConfig":{
+      "type":"structure",
+      "members":{
+        "itemExplorationConfig":{
+          "shape":"HyperParameters",
+          "documentation":"<p>A string to string map specifying the exploration configuration hyperparameters, including <code>explorationWeight</code> and <code>explorationItemAgeCutOff</code>, you want to use to configure the amount of item exploration Amazon Personalize uses when recommending items. See <a>native-recipe-new-item-USER_PERSONALIZATION</a>.</p>"
+        }
+      },
+      "documentation":"<p>The configuration details of a batch inference job.</p>"
     },
     "BatchInferenceJobInput":{
       "type":"structure",
@@ -816,6 +895,10 @@
         "failureReason":{
           "shape":"FailureReason",
           "documentation":"<p>If the batch inference job failed, the reason for the failure.</p>"
+        },
+        "solutionVersionArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the solution version used by the batch inference job.</p>"
         }
       },
       "documentation":"<p>A truncated version of the <a>BatchInferenceJob</a> datatype. The <a>ListBatchInferenceJobs</a> operation returns a list of batch inference job summaries.</p>"
@@ -845,6 +928,10 @@
           "shape":"TransactionsPerSecond",
           "documentation":"<p>Specifies the requested minimum provisioned transactions (recommendations) per second.</p>"
         },
+        "campaignConfig":{
+          "shape":"CampaignConfig",
+          "documentation":"<p>The configuration details of a campaign.</p>"
+        },
         "status":{
           "shape":"Status",
           "documentation":"<p>The status of the campaign.</p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul>"
@@ -864,6 +951,16 @@
         "latestCampaignUpdate":{"shape":"CampaignUpdateSummary"}
       },
       "documentation":"<p>Describes a deployed solution version, otherwise known as a campaign. For more information on campaigns, see <a>CreateCampaign</a>.</p>"
+    },
+    "CampaignConfig":{
+      "type":"structure",
+      "members":{
+        "itemExplorationConfig":{
+          "shape":"HyperParameters",
+          "documentation":"<p>A string to string map specifying the exploration configuration hyperparameters, including <code>explorationWeight</code> and <code>explorationItemAgeCutOff</code>, you want to use to configure the amount of item exploration Amazon Personalize uses when recommending items. Provide <code>itemExplorationConfig</code> data only if your solution uses the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-new-item-USER_PERSONALIZATION.html\">User-Personalization</a> recipe.</p>"
+        }
+      },
+      "documentation":"<p>The configuration details of a campaign.</p>"
     },
     "CampaignSummary":{
       "type":"structure",
@@ -906,6 +1003,7 @@
           "shape":"TransactionsPerSecond",
           "documentation":"<p>Specifies the requested minimum provisioned transactions (recommendations) per second that Amazon Personalize will support.</p>"
         },
+        "campaignConfig":{"shape":"CampaignConfig"},
         "status":{
           "shape":"Status",
           "documentation":"<p>The status of the campaign update.</p> <p>A campaign update can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul>"
@@ -1007,6 +1105,10 @@
           "shape":"Arn",
           "documentation":"<p>The Amazon Resource Name (ARN) of the solution version that will be used to generate the batch inference recommendations.</p>"
         },
+        "filterArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the filter to apply to the batch inference job. For more information on using filters, see Using Filters with Amazon Personalize.</p>"
+        },
         "numResults":{
           "shape":"NumBatchResults",
           "documentation":"<p>The number of recommendations to retreive.</p>"
@@ -1022,6 +1124,10 @@
         "roleArn":{
           "shape":"RoleArn",
           "documentation":"<p>The ARN of the Amazon Identity and Access Management role that has permissions to read and write to your input and out Amazon S3 buckets respectively.</p>"
+        },
+        "batchInferenceJobConfig":{
+          "shape":"BatchInferenceJobConfig",
+          "documentation":"<p>The configuration details of a batch inference job.</p>"
         }
       }
     },
@@ -1053,6 +1159,10 @@
         "minProvisionedTPS":{
           "shape":"TransactionsPerSecond",
           "documentation":"<p>Specifies the requested minimum provisioned transactions (recommendations) per second that Amazon Personalize will support.</p>"
+        },
+        "campaignConfig":{
+          "shape":"CampaignConfig",
+          "documentation":"<p>The configuration details of a campaign.</p>"
         }
       }
     },
@@ -1194,6 +1304,37 @@
         }
       }
     },
+    "CreateFilterRequest":{
+      "type":"structure",
+      "required":[
+        "name",
+        "datasetGroupArn",
+        "filterExpression"
+      ],
+      "members":{
+        "name":{
+          "shape":"Name",
+          "documentation":"<p>The name of the filter to create.</p>"
+        },
+        "datasetGroupArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the dataset group that the filter will belong to.</p>"
+        },
+        "filterExpression":{
+          "shape":"FilterExpression",
+          "documentation":"<p>The filter expression defines which items are included or excluded from recommendations. Filter expression must follow specific format rules. For information about filter expression structure and syntax, see <a>filter-expressions</a>.</p>"
+        }
+      }
+    },
+    "CreateFilterResponse":{
+      "type":"structure",
+      "members":{
+        "filterArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the new filter.</p>"
+        }
+      }
+    },
     "CreateSchemaRequest":{
       "type":"structure",
       "required":[
@@ -1249,11 +1390,11 @@
         },
         "eventType":{
           "shape":"EventType",
-          "documentation":"<p>When your have multiple event types (using an <code>EVENT_TYPE</code> schema field), this parameter specifies which event type (for example, 'click' or 'like') is used for training the model.</p>"
+          "documentation":"<p>When your have multiple event types (using an <code>EVENT_TYPE</code> schema field), this parameter specifies which event type (for example, 'click' or 'like') is used for training the model.</p> <p>If you do not provide an <code>eventType</code>, Amazon Personalize will use all interactions for training with equal weight regardless of type.</p>"
         },
         "solutionConfig":{
           "shape":"SolutionConfig",
-          "documentation":"<p>The configuration to use with the solution. When <code>performAutoML</code> is set to true, Amazon Personalize only evaluates the <code>autoMLConfig</code> section of the solution configuration.</p>"
+          "documentation":"<p>The configuration to use with the solution. When <code>performAutoML</code> is set to true, Amazon Personalize only evaluates the <code>autoMLConfig</code> section of the solution configuration.</p> <note> <p>Amazon Personalize doesn't support configuring the <code>hpoObjective</code> at this time.</p> </note>"
         }
       }
     },
@@ -1276,7 +1417,7 @@
         },
         "trainingMode":{
           "shape":"TrainingMode",
-          "documentation":"<p>The scope of training to be performed when creating the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution's training data, while the <code>UPDATE</code> option processes only the data that has changed in comparison to the input solution. Choose <code>UPDATE</code> when you want to incrementally update your solution version instead of creating an entirely new one.</p> <important> <p>The <code>UPDATE</code> option can only be used when you already have an active solution version created from the input solution using the <code>FULL</code> option and the input solution was trained with the <a>native-recipe-hrnn-coldstart</a> recipe.</p> </important>"
+          "documentation":"<p>The scope of training to be performed when creating the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution's training data, while the <code>UPDATE</code> option processes only the data that has changed in comparison to the input solution. Choose <code>UPDATE</code> when you want to incrementally update your solution version instead of creating an entirely new one.</p> <important> <p>The <code>UPDATE</code> option can only be used when you already have an active solution version created from the input solution using the <code>FULL</code> option and the input solution was trained with the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-new-item-USER_PERSONALIZATION.html\">User-Personalization</a> recipe or the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-hrnn-coldstart.html\">HRNN-Coldstart</a> recipe.</p> </important>"
         }
       }
     },
@@ -1710,6 +1851,16 @@
         }
       }
     },
+    "DeleteFilterRequest":{
+      "type":"structure",
+      "required":["filterArn"],
+      "members":{
+        "filterArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the filter to delete.</p>"
+        }
+      }
+    },
     "DeleteSchemaRequest":{
       "type":"structure",
       "required":["schemaArn"],
@@ -1879,6 +2030,25 @@
         "featureTransformation":{
           "shape":"FeatureTransformation",
           "documentation":"<p>A listing of the FeatureTransformation properties.</p>"
+        }
+      }
+    },
+    "DescribeFilterRequest":{
+      "type":"structure",
+      "required":["filterArn"],
+      "members":{
+        "filterArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the filter to describe.</p>"
+        }
+      }
+    },
+    "DescribeFilterResponse":{
+      "type":"structure",
+      "members":{
+        "filter":{
+          "shape":"Filter",
+          "documentation":"<p>The filter's details.</p>"
         }
       }
     },
@@ -2084,6 +2254,89 @@
       "value":{"shape":"ParameterValue"},
       "max":100
     },
+    "Filter":{
+      "type":"structure",
+      "members":{
+        "name":{
+          "shape":"Name",
+          "documentation":"<p>The name of the filter.</p>"
+        },
+        "filterArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the filter.</p>"
+        },
+        "creationDateTime":{
+          "shape":"Date",
+          "documentation":"<p>The time at which the filter was created.</p>"
+        },
+        "lastUpdatedDateTime":{
+          "shape":"Date",
+          "documentation":"<p>The time at which the filter was last updated.</p>"
+        },
+        "datasetGroupArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the dataset group to which the filter belongs.</p>"
+        },
+        "failureReason":{
+          "shape":"FailureReason",
+          "documentation":"<p>If the filter failed, the reason for its failure.</p>"
+        },
+        "filterExpression":{
+          "shape":"FilterExpression",
+          "documentation":"<p>Specifies the type of item interactions to filter out of recommendation results. The filter expression must follow specific format rules. For information about filter expression structure and syntax, see <a>filter-expressions</a>.</p>"
+        },
+        "status":{
+          "shape":"Status",
+          "documentation":"<p>The status of the filter.</p>"
+        }
+      },
+      "documentation":"<p>Contains information on a recommendation filter, including its ARN, status, and filter expression.</p>"
+    },
+    "FilterExpression":{
+      "type":"string",
+      "max":2500,
+      "min":1,
+      "sensitive":true
+    },
+    "FilterSummary":{
+      "type":"structure",
+      "members":{
+        "name":{
+          "shape":"Name",
+          "documentation":"<p>The name of the filter.</p>"
+        },
+        "filterArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the filter.</p>"
+        },
+        "creationDateTime":{
+          "shape":"Date",
+          "documentation":"<p>The time at which the filter was created.</p>"
+        },
+        "lastUpdatedDateTime":{
+          "shape":"Date",
+          "documentation":"<p>The time at which the filter was last updated.</p>"
+        },
+        "datasetGroupArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the dataset group to which the filter belongs.</p>"
+        },
+        "failureReason":{
+          "shape":"FailureReason",
+          "documentation":"<p>If the filter failed, the reason for the failure.</p>"
+        },
+        "status":{
+          "shape":"Status",
+          "documentation":"<p>The status of the filter.</p>"
+        }
+      },
+      "documentation":"<p>A short summary of a filter's attributes.</p>"
+    },
+    "Filters":{
+      "type":"list",
+      "member":{"shape":"FilterSummary"},
+      "max":100
+    },
     "GetSolutionMetricsRequest":{
       "type":"structure",
       "required":["solutionVersionArn"],
@@ -2112,7 +2365,7 @@
       "members":{
         "hpoObjective":{
           "shape":"HPOObjective",
-          "documentation":"<p>The metric to optimize during HPO.</p>"
+          "documentation":"<p>The metric to optimize during HPO.</p> <note> <p>Amazon Personalize doesn't support configuring the <code>hpoObjective</code> at this time.</p> </note>"
         },
         "hpoResourceConfig":{
           "shape":"HPOResourceConfig",
@@ -2123,14 +2376,14 @@
           "documentation":"<p>The hyperparameters and their allowable ranges.</p>"
         }
       },
-      "documentation":"<p>Describes the properties for hyperparameter optimization (HPO). For use with the bring-your-own-recipe feature. Do not use for Amazon Personalize native recipes.</p>"
+      "documentation":"<p>Describes the properties for hyperparameter optimization (HPO).</p>"
     },
     "HPOObjective":{
       "type":"structure",
       "members":{
         "type":{
           "shape":"HPOObjectiveType",
-          "documentation":"<p>The data type of the metric.</p>"
+          "documentation":"<p>The type of the metric. Valid values are <code>Maximize</code> and <code>Minimize</code>.</p>"
         },
         "metricName":{
           "shape":"MetricName",
@@ -2141,7 +2394,7 @@
           "documentation":"<p>A regular expression for finding the metric in the training job logs.</p>"
         }
       },
-      "documentation":"<p>The metric to optimize during hyperparameter optimization (HPO).</p>"
+      "documentation":"<p>The metric to optimize during hyperparameter optimization (HPO).</p> <note> <p>Amazon Personalize doesn't support configuring the <code>hpoObjective</code> at this time.</p> </note>"
     },
     "HPOObjectiveType":{
       "type":"string",
@@ -2418,6 +2671,36 @@
         "nextToken":{
           "shape":"NextToken",
           "documentation":"<p>A token for getting the next set of event trackers (if they exist).</p>"
+        }
+      }
+    },
+    "ListFiltersRequest":{
+      "type":"structure",
+      "members":{
+        "datasetGroupArn":{
+          "shape":"Arn",
+          "documentation":"<p>The ARN of the dataset group that contains the filters.</p>"
+        },
+        "nextToken":{
+          "shape":"NextToken",
+          "documentation":"<p>A token returned from the previous call to <code>ListFilters</code> for getting the next set of filters (if they exist).</p>"
+        },
+        "maxResults":{
+          "shape":"MaxResults",
+          "documentation":"<p>The maximum number of filters to return.</p>"
+        }
+      }
+    },
+    "ListFiltersResponse":{
+      "type":"structure",
+      "members":{
+        "Filters":{
+          "shape":"Filters",
+          "documentation":"<p>A list of returned filters.</p>"
+        },
+        "nextToken":{
+          "shape":"NextToken",
+          "documentation":"<p>A token for getting the next set of filters (if they exist).</p>"
         }
       }
     },
@@ -2747,7 +3030,7 @@
         },
         "eventType":{
           "shape":"EventType",
-          "documentation":"<p>The event type (for example, 'click' or 'like') that is used for training the model.</p>"
+          "documentation":"<p>The event type (for example, 'click' or 'like') that is used for training the model. If no <code>eventType</code> is provided, Amazon Personalize uses all interactions for training with equal weight regardless of type.</p>"
         },
         "solutionConfig":{
           "shape":"SolutionConfig",
@@ -2869,7 +3152,11 @@
         },
         "trainingMode":{
           "shape":"TrainingMode",
-          "documentation":"<p>The scope of training used to create the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution's training data, while the <code>UPDATE</code> option processes only the training data that has changed since the creation of the last solution version. Choose <code>UPDATE</code> when you want to start recommending items added to the dataset without retraining the model.</p> <important> <p>The <code>UPDATE</code> option can only be used after you've created a solution version with the <code>FULL</code> option and the training solution uses the <a>native-recipe-hrnn-coldstart</a>.</p> </important>"
+          "documentation":"<p>The scope of training to be performed when creating the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution's training data, while the <code>UPDATE</code> option processes only the data that has changed in comparison to the input solution. Choose <code>UPDATE</code> when you want to incrementally update your solution version instead of creating an entirely new one.</p> <important> <p>The <code>UPDATE</code> option can only be used when you already have an active solution version created from the input solution using the <code>FULL</code> option and the input solution was trained with the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-new-item-USER_PERSONALIZATION.html\">User-Personalization</a> recipe or the <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-hrnn-coldstart.html\">HRNN-Coldstart</a> recipe.</p> </important>"
+        },
+        "tunedHPOParams":{
+          "shape":"TunedHPOParams",
+          "documentation":"<p>If hyperparameter optimization was performed, contains the hyperparameter values of the best performing model.</p>"
         },
         "status":{
           "shape":"Status",
@@ -2954,6 +3241,16 @@
       "min":1
     },
     "Tunable":{"type":"boolean"},
+    "TunedHPOParams":{
+      "type":"structure",
+      "members":{
+        "algorithmHyperParameters":{
+          "shape":"HyperParameters",
+          "documentation":"<p>A list of the hyperparameter values of the best performing model.</p>"
+        }
+      },
+      "documentation":"<p>If hyperparameter optimization (HPO) was performed, contains the hyperparameter values of the best performing model.</p>"
+    },
     "UpdateCampaignRequest":{
       "type":"structure",
       "required":["campaignArn"],
@@ -2969,6 +3266,10 @@
         "minProvisionedTPS":{
           "shape":"TransactionsPerSecond",
           "documentation":"<p>Specifies the requested minimum provisioned transactions (recommendations) per second that Amazon Personalize will support.</p>"
+        },
+        "campaignConfig":{
+          "shape":"CampaignConfig",
+          "documentation":"<p>The configuration details of a campaign.</p>"
         }
       }
     },
